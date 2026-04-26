@@ -30,7 +30,7 @@ export default function CTASection() {
         >
           {/* Bouton LinkedIn */}
           <motion.a
-            href="https://www.linkedin.com/company/gabonhubtech/"
+            href="https://www.linkedin.com/company/gabonhubtech/?viewAsMember=true"
             target="_blank"
             rel="noopener noreferrer"
             whileHover={{ scale: 1.05 }}
