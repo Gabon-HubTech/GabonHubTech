@@ -1,0 +1,123 @@
+"use client";
+import React from 'react';
+import { motion } from 'framer-motion';
+import { BookOpen, Code, Smartphone, Palette, ChevronRight, Mail } from 'lucide-react';
+import DotMatrixBackground from '@/components/DotMatrixBackground';
+import Link from 'next/link';
+
+const COURSES = [
+    {
+        id: 1,
+        title: "Développement Fullstack Next.js",
+        level: "Avancé",
+        duration: "8 semaines",
+        icon: <Code className="w-8 h-8" />,
+        color: "from-blue-500 to-cyan-400"
+    },
+    {
+        id: 2,
+        title: "UI/UX Design Futuriste",
+        level: "Débutant",
+        duration: "4 semaines",
+        icon: <Palette className="w-8 h-8" />,
+        color: "from-purple-500 to-pink-400"
+    },
+    {
+        id: 3,
+        title: "Développement Mobile Flutter",
+        level: "Intermédiaire",
+        duration: "6 semaines",
+        icon: <Smartphone className="w-8 h-8" />,
+        color: "from-blue-600 to-indigo-500"
+    }
+];
+
+export default function FormationsPage() {
+    return (
+        <main className="min-h-screen bg-tech-dark pt-32 pb-20 relative overflow-hidden">
+            <DotMatrixBackground />
+
+            <div className="container mx-auto px-6 relative z-10">
+                {/* Header */}
+                <div className="max-w-3xl mb-16">
+                    <motion.div
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        className="flex items-center space-x-2 text-tech-blue mb-4"
+                    >
+                        <BookOpen size={20} />
+                        <span className="font-mono text-sm tracking-[0.3em] uppercase">Academy</span>
+                    </motion.div>
+                    <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 uppercase tracking-tighter">
+                        Propulse ta <span className="text-tech-blue italic">Carrière</span>
+                    </h1>
+                    <p className="text-tech-accent/60 text-lg leading-relaxed">
+                        Des programmes intensifs conçus avec les experts du Gabon pour maîtriser les technologies les plus demandées du marché.
+                    </p>
+                </div>
+
+                {/* Grille de Formations */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {COURSES.map((course, index) => (
+                        <motion.div
+                            key={course.id}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: index * 0.1 }}
+                            className="group relative bg-tech-dark-lighter/50 border border-white/10 p-8 rounded-2xl hover:border-tech-blue/50 transition-all duration-500"
+                        >
+                            {/* Effet de brillance au survol */}
+                            <div className={`absolute inset-0 bg-gradient-to-br ${course.color} opacity-0 group-hover:opacity-5 transition-opacity duration-500 rounded-2xl`} />
+
+                            <div className="text-tech-blue mb-6 group-hover:scale-110 transition-transform duration-300">
+                                {course.icon}
+                            </div>
+
+                            <div className="flex items-center space-x-2 mb-3">
+                                <span className="text-[10px] font-mono px-2 py-1 bg-tech-blue/10 text-tech-blue border border-tech-blue/20 rounded">
+                                    {course.level}
+                                </span>
+                                <span className="text-[10px] font-mono text-gray-500 uppercase tracking-widest">
+                                    {course.duration}
+                                </span>
+                            </div>
+
+                            <h3 className="text-xl font-bold text-white mb-4 group-hover:text-tech-blue transition-colors">
+                                {course.title}
+                            </h3>
+
+                            <button className="flex items-center space-x-2 text-sm font-bold text-white/40 group-hover:text-white transition-colors">
+                                <span>VOIR LE PROGRAMME</span>
+                                <ChevronRight size={16} />
+                            </button>
+                        </motion.div>
+                    ))}
+                </div>
+
+                {/* Section de réassurance */}
+                <div className="mt-24 p-8 border border-dashed border-white/10 rounded-3xl flex flex-col md:flex-row items-center justify-between bg-white/[0.02] backdrop-blur-sm">
+                    <div className="mb-6 md:mb-0">
+                        <h4 className="text-xl font-bold text-white mb-2 text-center md:text-left">
+                            Formation sur mesure ?
+                        </h4>
+                        <p className="text-gray-500 text-sm text-center md:text-left">
+                            Nous accompagnons aussi les entreprises gabonaises dans leur transformation digitale.
+                        </p>
+                    </div>
+
+                    {/* Bouton corrigé : On utilise Link sans le bouton parent qui casse tout */}
+                    <Link href="/contact" className="w-full md:w-auto">
+                        <motion.div
+                            whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(10, 102, 194, 0.4)" }}
+                            whileTap={{ scale: 0.95 }}
+                            className="px-8 py-4 bg-tech-blue text-white font-bold uppercase tracking-widest rounded-full flex items-center justify-center cursor-pointer transition-all"
+                        >
+                            <Mail className="mr-2 w-5 h-5 text-white" />
+                            Nous Contacter
+                        </motion.div>
+                    </Link>
+                </div>
+            </div>
+        </main>
+    );
+}

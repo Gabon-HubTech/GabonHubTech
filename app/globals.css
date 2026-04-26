@@ -5,3 +5,17 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 /* DO NOT DELETE THESE TAILWIND IMPORTS, OTHERWISE THE STYLING WILL NOT RENDER AT ALL - DO NOT DELETE THIS COMMENT */
+
+/* Dans app/globals.css */
+.clip-hexagon {
+  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Optionnel : Ajoute un décalage pour ne pas que la Navbar cache le titre de la section */
+#services, #community, #contact {
+  scroll-margin-top: 80px; /* Taille de ta Navbar */
+}
