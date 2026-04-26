@@ -153,7 +153,7 @@ export default function ContactPage() {
                             className="lg:w-1/3 w-full space-y-6"
                         >
                             <a
-                                href="https://www.linkedin.com/company/gabonhubtech/"
+                                href="https://www.linkedin.com/company/gabonhubtech/?viewAsMember=true"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="block p-8 rounded-3xl bg-tech-blue/10 border border-tech-blue/30 hover:bg-tech-blue/20 transition-all group"
