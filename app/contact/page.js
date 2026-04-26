@@ -1,16 +1,47 @@
 "use client";
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Send, Mail, Linkedin, Globe, CheckCircle, MessageSquare, Users } from 'lucide-react';
+import { Send, Mail, Linkedin, Globe, CheckCircle, MessageSquare, Users, AlertCircle } from 'lucide-react';
 import DotMatrixBackground from '@/components/DotMatrixBackground';
 
 export default function ContactPage() {
-    const [status, setStatus] = useState('idle');
+    const [status, setStatus] = useState('idle'); // idle, sending, success, error
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setStatus('sending');
-        setTimeout(() => setStatus('success'), 1500);
+
+        // Récupération des données via l'objet FormData
+        const formData = {
+            name: e.target[0].value,
+            email: e.target[1].value,
+            message: e.target[2].value,
+        };
+
+        try {
+            // URL de ton API sur Render
+            const API_URL = "https://gabon-hubtech-api.onrender.com/api/contact";
+
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            const result = await response.json();
+
+            if (response.ok && result.success) {
+                setStatus('success');
+            } else {
+                console.error("Erreur API:", result.error);
+                setStatus('error');
+            }
+        } catch (error) {
+            console.error("Erreur réseau:", error);
+            setStatus('error');
+        }
     };
 
     return (
@@ -18,7 +49,7 @@ export default function ContactPage() {
             <DotMatrixBackground />
 
             <div className="container mx-auto px-6 relative z-10">
-                {/* Header : Focus sur le Virtuel */}
+                {/* Header */}
                 <div className="max-w-3xl mb-16">
                     <motion.div
                         initial={{ opacity: 0, y: 10 }}
@@ -44,7 +75,7 @@ export default function ContactPage() {
                     >
                         <CheckCircle className="w-20 h-20 text-tech-blue mx-auto mb-6" />
                         <h2 className="text-3xl font-bold text-white mb-4">Signal Transmis</h2>
-                        <p className="text-gray-400 mb-8 text-lg">Votre message a rejoint notre cloud. On vous recontacte très vite !</p>
+                        <p className="text-gray-400 mb-8 text-lg">Votre message a été enregistré et envoyé avec succès. On vous recontacte très vite !</p>
                         <button
                             onClick={() => setStatus('idle')}
                             className="px-8 py-3 border border-tech-blue text-tech-blue rounded-full hover:bg-tech-blue hover:text-white transition-all font-bold text-sm uppercase tracking-widest"
@@ -90,27 +121,39 @@ export default function ContactPage() {
                                         className="w-full bg-tech-dark border border-white/10 rounded-xl px-5 py-4 text-white focus:outline-none focus:border-tech-blue focus:ring-1 focus:ring-tech-blue/50 transition-all resize-none"
                                     ></textarea>
                                 </div>
+
+                                {status === 'error' && (
+                                    <motion.div
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        className="flex items-center gap-2 text-red-400 bg-red-400/10 p-4 rounded-xl border border-red-400/20"
+                                    >
+                                        <AlertCircle size={18} />
+                                        <p className="text-sm">Une erreur est survenue. Vérifiez votre connexion ou réessayez plus tard.</p>
+                                    </motion.div>
+                                )}
+
                                 <button
                                     type="submit"
                                     disabled={status === 'sending'}
                                     className="group relative px-12 py-4 bg-tech-blue overflow-hidden rounded-xl font-bold text-white transition-all hover:shadow-[0_0_30px_rgba(10,102,194,0.4)] disabled:opacity-50"
                                 >
                                     <span className="relative z-10 flex items-center gap-3 tracking-wider uppercase text-sm">
-                                        {status === 'sending' ? 'CONNEXION...' : 'ENVOYER'}
+                                        {status === 'sending' ? 'TRANSMISSION...' : 'ENVOYER LE SIGNAL'}
                                         <Send size={18} />
                                     </span>
                                 </button>
                             </form>
                         </motion.div>
 
-                        {/* Hub Social : Focus LinkedIn */}
+                        {/* Hub Social */}
                         <motion.div
                             initial={{ opacity: 0, x: 20 }}
                             animate={{ opacity: 1, x: 0 }}
                             className="lg:w-1/3 w-full space-y-6"
                         >
                             <a
-                                href="https://www.linkedin.com/company/gabonhubtech/?viewAsMember=true" // Remplace par ton vrai lien
+                                href="https://www.linkedin.com/company/gabonhubtech/"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="block p-8 rounded-3xl bg-tech-blue/10 border border-tech-blue/30 hover:bg-tech-blue/20 transition-all group"
