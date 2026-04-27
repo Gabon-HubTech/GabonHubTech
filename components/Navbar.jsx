@@ -111,37 +111,60 @@ export default function Navbar() {
                 </button>
 
                 {/* --- MENU MOBILE OVERLAY --- */}
-                <div className={`fixed inset-0 bg-tech-dark/95 backdrop-blur-xl z-40 transition-transform duration-500 md:hidden ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-                    <div className="flex flex-col h-full pt-32 px-10 space-y-8">
-                        {navLinks.map((link) => (
-                            <Link
-                                key={link.name}
-                                href={link.href}
-                                className="text-2xl font-bold text-white uppercase tracking-tighter"
-                                onClick={() => setIsMobileMenuOpen(false)}
-                            >
-                                {link.name}
-                                {pathname === link.href && <span className="text-tech-blue ml-2">.</span>}
-                            </Link>
-                        ))}
+                <div className={`fixed inset-0 z-40 md:hidden transition-all duration-500 ${isMobileMenuOpen ? 'visible' : 'invisible'}`}>
 
-                        <div className="pt-6 border-t border-white/10 space-y-6">
-                            <p className="text-tech-blue font-mono text-xs uppercase tracking-widest">Services</p>
-                            <Link href="/events" className="block text-xl text-tech-accent/70" onClick={() => setIsMobileMenuOpen(false)}>Événements</Link>
-                            <Link href="/formations" className="block text-xl text-tech-accent/70" onClick={() => setIsMobileMenuOpen(false)}>Formations Academy</Link>
+                    {/* Fond sombre avec flou intense pour isoler le menu */}
+                    <div
+                        className={`absolute inset-0 bg-tech-dark/95 backdrop-blur-2xl transition-opacity duration-500 ${isMobileMenuOpen ? 'opacity-100' : 'opacity-0'}`}
+                        onClick={() => setIsMobileMenuOpen(false)} // Ferme le menu si on clique sur le fond
+                    />
+
+                    {/* Contenu du menu avec un léger dégradé pour l'esthétique */}
+                    <div className={`absolute right-0 top-0 h-full w-[80%] max-w-sm bg-gradient-to-b from-tech-dark-lighter to-tech-dark border-l border-white/10 shadow-2xl transition-transform duration-500 ease-out p-10 flex flex-col ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+
+                        <div className="flex flex-col space-y-8 mt-20">
+                            {navLinks.map((link) => (
+                                <Link
+                                    key={link.name}
+                                    href={link.href}
+                                    className={`text-3xl font-bold uppercase tracking-tighter transition-colors ${pathname === link.href ? 'text-tech-blue' : 'text-white'}`}
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                >
+                                    {link.name}
+                                </Link>
+                            ))}
+
+                            <div className="pt-8 border-t border-white/10 space-y-6">
+                                <p className="text-tech-blue font-mono text-[10px] uppercase tracking-[0.3em]">Expertises</p>
+
+                                <Link href="/events" className="flex items-center space-x-4 group" onClick={() => setIsMobileMenuOpen(false)}>
+                                    <div className="p-2 bg-tech-blue/10 rounded-lg text-tech-blue"><Calendar size={20} /></div>
+                                    <span className="text-xl text-tech-accent/80 font-medium">Événements</span>
+                                </Link>
+
+                                <Link href="/formations" className="flex items-center space-x-4 group" onClick={() => setIsMobileMenuOpen(false)}>
+                                    <div className="p-2 bg-tech-blue/10 rounded-lg text-tech-blue"><GraduationCap size={20} /></div>
+                                    <span className="text-xl text-tech-accent/80 font-medium">Academy</span>
+                                </Link>
+                            </div>
                         </div>
 
-                        <a
-                            href="https://www.linkedin.com/company/gabonhubtech/?viewAsMember=true"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="w-full py-4 bg-tech-blue text-white text-center font-bold uppercase rounded-xl shadow-lg shadow-tech-blue/20"
-                        >
-                            Rejoindre la communauté
-                        </a>
+                        {/* Bouton CTA en bas du menu mobile */}
+                        <div className="mt-auto pb-10">
+                            <a
+                                href="https://www.linkedin.com/company/gabonhubtech/?viewAsMember=true"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="w-full py-5 bg-tech-blue text-white text-center font-bold uppercase tracking-widest rounded-2xl shadow-[0_10px_30px_rgba(10,102,194,0.3)] block"
+                            >
+                                Rejoindre le Hub
+                            </a>
+                            <p className="text-center text-[10px] text-gray-500 mt-6 font-mono uppercase tracking-widest">
+                                Gabon HubTech © 2026
+                            </p>
+                        </div>
                     </div>
                 </div>
-
             </div>
         </nav>
     );
