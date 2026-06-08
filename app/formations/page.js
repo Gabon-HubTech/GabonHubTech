@@ -31,6 +31,8 @@ export default function FormationsPage() {
             <DotMatrixBackground />
 
             <div className="container mx-auto px-6 relative z-10">
+                <button onClick={() => alert("Page cliquable")} className="bg-red-500 p-4 text-white z-[999] mb-4">TEST CLIC PAGE</button>
+                <p className="text-white mb-4">Dernière version : {new Date().toLocaleTimeString()}</p>
                 {/* Header */}
                 <div className="max-w-3xl mb-16">
                     <motion.div
