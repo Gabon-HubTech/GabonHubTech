@@ -14,7 +14,7 @@ export default function AdminDashboard() {
     }, [router]);
 
     return (
-        <div className="min-h-screen bg-tech-dark p-10">
+        <div className="min-h-screen bg-tech-dark p-10 mt-10">
             <h1 className="text-4xl font-bold text-white mb-10">Dashboard Admin</h1>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <Link href="/admin/events" className="p-10 border border-tech-blue rounded-3xl text-white hover:bg-tech-blue/20 transition-all">
