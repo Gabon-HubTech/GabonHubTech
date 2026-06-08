@@ -1,38 +1,31 @@
 "use client";
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { BookOpen, Code, Smartphone, Palette, ChevronRight, Mail } from 'lucide-react';
+import { BookOpen, ChevronRight, Mail } from 'lucide-react';
 import DotMatrixBackground from '@/components/DotMatrixBackground';
 import Link from 'next/link';
-
-const COURSES = [
-    {
-        id: 1,
-        title: "Développement Fullstack Next.js",
-        level: "Avancé",
-        duration: "8 semaines",
-        icon: <Code className="w-8 h-8" />,
-        color: "from-blue-500 to-cyan-400"
-    },
-    {
-        id: 2,
-        title: "UI/UX Design Futuriste",
-        level: "Débutant",
-        duration: "4 semaines",
-        icon: <Palette className="w-8 h-8" />,
-        color: "from-purple-500 to-pink-400"
-    },
-    {
-        id: 3,
-        title: "Développement Mobile Flutter",
-        level: "Intermédiaire",
-        duration: "6 semaines",
-        icon: <Smartphone className="w-8 h-8" />,
-        color: "from-blue-600 to-indigo-500"
-    }
-];
+import { apiFetch } from '@/lib/api';
 
 export default function FormationsPage() {
+    const [courses, setCourses] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchCourses = async () => {
+            try {
+                const result = await apiFetch('/api/formations');
+                if (result.success) {
+                    setCourses(result.data);
+                }
+            } catch (error) {
+                console.error("Erreur chargement formations:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchCourses();
+    }, []);
+
     return (
         <main className="min-h-screen bg-tech-dark pt-32 pb-20 relative overflow-hidden">
             <DotMatrixBackground />
@@ -57,42 +50,47 @@ export default function FormationsPage() {
                 </div>
 
                 {/* Grille de Formations */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {COURSES.map((course, index) => (
-                        <motion.div
-                            key={course.id}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: index * 0.1 }}
-                            className="group relative bg-tech-dark-lighter/50 border border-white/10 p-8 rounded-2xl hover:border-tech-blue/50 transition-all duration-500"
-                        >
-                            {/* Effet de brillance au survol */}
-                            <div className={`absolute inset-0 bg-gradient-to-br ${course.color} opacity-0 group-hover:opacity-5 transition-opacity duration-500 rounded-2xl`} />
+                {loading ? (
+                    <p className="text-white">Chargement des formations...</p>
+                ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {courses.map((course, index) => (
+                            <motion.div
+                                key={course._id}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: index * 0.1 }}
+                                className="group relative bg-tech-dark-lighter/50 border border-white/10 p-8 rounded-2xl hover:border-tech-blue/50 transition-all duration-500"
+                            >
+                                {/* Effet de brillance au survol */}
+                                <div className={`absolute inset-0 bg-gradient-to-br ${course.color} opacity-0 group-hover:opacity-5 transition-opacity duration-500 rounded-2xl`} />
 
-                            <div className="text-tech-blue mb-6 group-hover:scale-110 transition-transform duration-300">
-                                {course.icon}
-                            </div>
+                                <div className="text-tech-blue mb-6 group-hover:scale-110 transition-transform duration-300">
+                                    {/* Icone simple, on pourrait la gérer dynamiquement si besoin */}
+                                    <BookOpen className="w-8 h-8" />
+                                </div>
 
-                            <div className="flex items-center space-x-2 mb-3">
-                                <span className="text-[10px] font-mono px-2 py-1 bg-tech-blue/10 text-tech-blue border border-tech-blue/20 rounded">
-                                    {course.level}
-                                </span>
-                                <span className="text-[10px] font-mono text-gray-500 uppercase tracking-widest">
-                                    {course.duration}
-                                </span>
-                            </div>
+                                <div className="flex items-center space-x-2 mb-3">
+                                    <span className="text-[10px] font-mono px-2 py-1 bg-tech-blue/10 text-tech-blue border border-tech-blue/20 rounded">
+                                        {course.level}
+                                    </span>
+                                    <span className="text-[10px] font-mono text-gray-500 uppercase tracking-widest">
+                                        {course.duration}
+                                    </span>
+                                </div>
 
-                            <h3 className="text-xl font-bold text-white mb-4 group-hover:text-tech-blue transition-colors">
-                                {course.title}
-                            </h3>
+                                <h3 className="text-xl font-bold text-white mb-4 group-hover:text-tech-blue transition-colors">
+                                    {course.title}
+                                </h3>
 
-                            <button className="flex items-center space-x-2 text-sm font-bold text-white/40 group-hover:text-white transition-colors">
-                                <span>VOIR LE PROGRAMME</span>
-                                <ChevronRight size={16} />
-                            </button>
-                        </motion.div>
-                    ))}
-                </div>
+                                <button className="flex items-center space-x-2 text-sm font-bold text-white/40 group-hover:text-white transition-colors">
+                                    <span>VOIR LE PROGRAMME</span>
+                                    <ChevronRight size={16} />
+                                </button>
+                            </motion.div>
+                        ))}
+                    </div>
+                )}
 
                 {/* Section de réassurance */}
                 <div className="mt-24 p-8 border border-dashed border-white/10 rounded-3xl flex flex-col md:flex-row items-center justify-between bg-white/[0.02] backdrop-blur-sm">
@@ -105,7 +103,6 @@ export default function FormationsPage() {
                         </p>
                     </div>
 
-                    {/* Bouton corrigé : On utilise Link sans le bouton parent qui casse tout */}
                     <Link href="/contact" className="w-full md:w-auto">
                         <motion.div
                             whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(10, 102, 194, 0.4)" }}
