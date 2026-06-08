@@ -7,18 +7,26 @@ import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 
 export default function FormationDetailPage() {
-    const { id } = useParams();
+    const params = useParams();
+    const id = params?.id;
     const [formation, setFormation] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        if (!id) return;
+        
         const fetchFormation = async () => {
             try {
+                console.log("Fetching formation with ID:", id);
                 const result = await apiFetch('/api/formations');
+                console.log("API result:", result);
+                
                 const foundFormation = result.data.find(f => f._id === id);
+                console.log("Found formation:", foundFormation);
+                
                 setFormation(foundFormation);
             } catch (error) {
-                console.error("Erreur:", error);
+                console.error("Erreur détaillée:", error);
             } finally {
                 setLoading(false);
             }
@@ -27,7 +35,7 @@ export default function FormationDetailPage() {
     }, [id]);
 
     if (loading) return <div className="text-white p-20">Chargement...</div>;
-    if (!formation) return <div className="text-white p-20">Formation non trouvée.</div>;
+    if (!formation) return <div className="text-white p-20">Formation non trouvée. (ID: {id})</div>;
 
     return (
         <main className="min-h-screen bg-tech-dark pt-32 pb-20 relative overflow-hidden">
