@@ -31,10 +31,12 @@ export default function AdminFormations() {
 
     return (
         <div className="p-10 bg-tech-dark min-h-screen text-white">
-            <Link href="/admin/dashboard" className="flex items-center text-tech-blue hover:text-white mb-6 transition-colors">
-                <ArrowLeft className="mr-2" /> Retour au Dashboard
-            </Link>
-            <h1 className="text-3xl mb-6">Gestion Formations</h1>
+            <div className="flex items-center mb-6">
+                <Link href="/admin/dashboard" className="mr-4 text-tech-blue hover:text-white transition-colors">
+                    <ArrowLeft size={32} />
+                </Link>
+                <h1 className="text-3xl">Gestion Formations</h1>
+            </div>
             <AdminForm 
                 fields={[
                     {name: 'title', required: true}, 
