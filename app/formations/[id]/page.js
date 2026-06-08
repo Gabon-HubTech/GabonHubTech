@@ -11,22 +11,28 @@ export default function FormationDetailPage() {
     const id = params?.id;
     const [formation, setFormation] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         if (!id) return;
         
         const fetchFormation = async () => {
             try {
-                console.log("Fetching formation with ID:", id);
+                setLoading(true);
+                setError(null);
                 const result = await apiFetch('/api/formations');
-                console.log("API result:", result);
                 
-                const foundFormation = result.data.find(f => f._id === id);
-                console.log("Found formation:", foundFormation);
+                // On utilise == pour éviter les problèmes de type (String vs ObjectID)
+                const foundFormation = result.data.find(f => f._id == id);
                 
-                setFormation(foundFormation);
-            } catch (error) {
-                console.error("Erreur détaillée:", error);
+                if (foundFormation) {
+                    setFormation(foundFormation);
+                } else {
+                    setError("Formation introuvable.");
+                }
+            } catch (err) {
+                console.error("Erreur de chargement:", err);
+                setError("Erreur lors du chargement des détails.");
             } finally {
                 setLoading(false);
             }
@@ -34,8 +40,8 @@ export default function FormationDetailPage() {
         fetchFormation();
     }, [id]);
 
-    if (loading) return <div className="text-white p-20">Chargement...</div>;
-    if (!formation) return <div className="text-white p-20">Formation non trouvée. (ID: {id})</div>;
+    if (loading) return <div className="text-white p-20 text-center">Chargement en cours...</div>;
+    if (error) return <div className="text-red-400 p-20 text-center">{error} (ID: {id})</div>;
 
     return (
         <main className="min-h-screen bg-tech-dark pt-32 pb-20 relative overflow-hidden">
@@ -53,7 +59,7 @@ export default function FormationDetailPage() {
                         {formation.duration}
                     </span>
                 </div>
-                <p className="text-gray-300 text-lg max-w-3xl">{formation.description}</p>
+                <p className="text-gray-300 text-lg max-w-3xl leading-relaxed">{formation.description}</p>
             </div>
         </main>
     );
