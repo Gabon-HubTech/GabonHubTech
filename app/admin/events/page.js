@@ -7,6 +7,7 @@ import Link from 'next/link';
 
 export default function AdminEvents() {
     const [events, setEvents] = useState([]);
+    const [editingEvent, setEditingEvent] = useState({});
 
     useEffect(() => { loadEvents(); }, []);
 
@@ -21,6 +22,7 @@ export default function AdminEvents() {
         } else {
             await apiFetch('/api/events', { method: 'POST', body: JSON.stringify(data) });
         }
+        setEditingEvent({});
         loadEvents();
     };
 
@@ -38,6 +40,7 @@ export default function AdminEvents() {
                 <h1 className="text-3xl">Gestion Événements</h1>
             </div>
             <AdminForm 
+                initialData={editingEvent}
                 fields={[{name: 'title', required: true}, {name: 'description', required: true}, {name: 'location', required: true}]} 
                 onSubmit={handleSave} 
             />
@@ -45,7 +48,10 @@ export default function AdminEvents() {
                 {events.map(ev => (
                     <div key={ev._id} className="flex justify-between bg-white/[0.05] p-4 rounded-xl">
                         {ev.title}
-                        <button onClick={() => handleDelete(ev._id)} className="text-red-400">Supprimer</button>
+                        <div>
+                            <button onClick={() => setEditingEvent(ev)} className="text-tech-blue mr-4">Modifier</button>
+                            <button onClick={() => handleDelete(ev._id)} className="text-red-400">Supprimer</button>
+                        </div>
                     </div>
                 ))}
             </div>

@@ -7,6 +7,7 @@ import Link from 'next/link';
 
 export default function AdminFormations() {
     const [formations, setFormations] = useState([]);
+    const [editingFormation, setEditingFormation] = useState({});
 
     useEffect(() => { loadFormations(); }, []);
 
@@ -21,6 +22,7 @@ export default function AdminFormations() {
         } else {
             await apiFetch('/api/formations', { method: 'POST', body: JSON.stringify(data) });
         }
+        setEditingFormation({});
         loadFormations();
     };
 
@@ -38,6 +40,7 @@ export default function AdminFormations() {
                 <h1 className="text-3xl">Gestion Formations</h1>
             </div>
             <AdminForm 
+                initialData={editingFormation}
                 fields={[
                     {name: 'title', required: true}, 
                     {name: 'level', required: true}, 
@@ -50,7 +53,10 @@ export default function AdminFormations() {
                 {formations.map(f => (
                     <div key={f._id} className="flex justify-between bg-white/[0.05] p-4 rounded-xl">
                         {f.title}
-                        <button onClick={() => handleDelete(f._id)} className="text-red-400">Supprimer</button>
+                        <div>
+                            <button onClick={() => setEditingFormation(f)} className="text-tech-blue mr-4">Modifier</button>
+                            <button onClick={() => handleDelete(f._id)} className="text-red-400">Supprimer</button>
+                        </div>
                     </div>
                 ))}
             </div>

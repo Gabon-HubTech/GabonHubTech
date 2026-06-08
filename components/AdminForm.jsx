@@ -1,15 +1,25 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export default function AdminForm({ onSubmit, initialData = {}, fields }) {
     const [formData, setFormData] = useState(initialData);
+
+    useEffect(() => {
+        setFormData(initialData);
+    }, [initialData]);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        onSubmit(formData);
+        setFormData({}); // Reset form
+    };
+
     return (
-        <form onSubmit={(e) => { e.preventDefault(); onSubmit(formData); }} className="space-y-4 bg-tech-dark-lighter p-6 rounded-2xl">
+        <form onSubmit={handleSubmit} className="space-y-4 bg-tech-dark-lighter p-6 rounded-2xl">
             {fields.map(field => (
                 <div key={field.name} className="space-y-1">
                     <label className="text-sm text-gray-400 capitalize">{field.name}</label>
@@ -23,7 +33,7 @@ export default function AdminForm({ onSubmit, initialData = {}, fields }) {
                 </div>
             ))}
             <button type="submit" className="bg-tech-blue px-6 py-3 rounded-xl text-white font-bold">
-                Enregistrer
+                {formData._id ? "Mettre à jour" : "Créer"}
             </button>
         </form>
     );
