@@ -88,7 +88,7 @@ export default function FormationsPage() {
                                 </p>
 
                                 <Link 
-                                    href={`/formations/${course._id}`}
+                                    href={`/formations/${course._id || course.id}`}
                                     className="flex items-center space-x-2 text-sm font-bold text-white/40 group-hover:text-white transition-colors"
                                 >
                                     <span>VOIR LE PROGRAMME</span>
