@@ -87,13 +87,13 @@ export default function FormationsPage() {
                                     {course.description && course.description.length > 100 ? `${course.description.substring(0, 100)}...` : course.description}
                                 </p>
 
-                                <Link 
+                                <a 
                                     href={`/formations/${course._id || course.id}`}
                                     className="flex items-center space-x-2 text-sm font-bold text-white/40 group-hover:text-white transition-colors"
                                 >
                                     <span>VOIR LE PROGRAMME</span>
                                     <ChevronRight size={16} />
-                                </Link>
+                                </a>
                             </motion.div>
                         ))}
                     </div>
