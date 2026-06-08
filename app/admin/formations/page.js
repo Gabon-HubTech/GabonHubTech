@@ -31,7 +31,7 @@ export default function AdminFormations() {
 
     return (
         <div className="p-10 bg-tech-dark min-h-screen text-white">
-            <div className="flex items-center mb-6">
+            <div className="flex items-center mt-10 mb-6">
                 <Link href="/admin/dashboard" className="mr-4 text-tech-blue hover:text-white transition-colors">
                     <ArrowLeft size={32} />
                 </Link>
