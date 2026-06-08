@@ -16,8 +16,22 @@ const inter = Inter({
 });
 
 export const metadata = {
-  title: "gabon hubtech",
-  description: "",
+  title: "Gabon HubTech | La Communauté des Passionnés de Technologie",
+  description: "Rejoignez Gabon HubTech, l'écosystème dynamique des professionnels, étudiants et passionnés de tech au Gabon et dans la diaspora.",
+  keywords: ["Tech Gabon", "Gabon HubTech", "Innovation", "Communauté Digitale", "Développement", "Libreville"],
+  openGraph: {
+    title: "Gabon HubTech",
+    description: "Bâtissons ensemble l'avenir numérique du Gabon.",
+    url: "https://gabonhubtech.netlify.app",
+    siteName: "Gabon HubTech",
+    locale: "fr_GA",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Gabon HubTech",
+    description: "Rejoignez la révolution tech gabonaise.",
+  },
 };
 
 export default function RootLayout({ children }) {

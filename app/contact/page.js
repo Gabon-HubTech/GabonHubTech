@@ -3,43 +3,59 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Send, Mail, Linkedin, Globe, CheckCircle, MessageSquare, Users, AlertCircle } from 'lucide-react';
 import DotMatrixBackground from '@/components/DotMatrixBackground';
+import { contactApi } from '@/lib/api';
 
 export default function ContactPage() {
     const [status, setStatus] = useState('idle'); // idle, sending, success, error
+    const [errors, setErrors] = useState({});
+
+    const validateForm = (data) => {
+        const newErrors = {};
+        if (data.name.trim().length < 2) newErrors.name = "Le nom doit contenir au moins 2 caractères.";
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) newErrors.email = "Email invalide.";
+        if (data.message.trim().length < 10) newErrors.message = "Le message doit contenir au moins 10 caractères.";
+        return newErrors;
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setStatus('sending');
-
-        // Récupération des données via l'objet FormData
+        
+        const form = e.target;
         const formData = {
-            name: e.target[0].value,
-            email: e.target[1].value,
-            message: e.target[2].value,
+            name: form.name.value,
+            email: form.email.value,
+            message: form.message.value,
+            honeypot: form.fax_number.value,
         };
 
-        try {
-            // URL de ton API sur Render
-            const API_URL = "https://gabon-hubtech-api.onrender.com/api/contact";
+        if (formData.honeypot) {
+            setStatus('success');
+            return;
+        }
 
-            const response = await fetch(API_URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
+        const validationErrors = validateForm(formData);
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+            return;
+        }
+
+        setErrors({});
+        setStatus('sending');
+
+        try {
+            const result = await contactApi.submit({
+                name: formData.name,
+                email: formData.email,
+                message: formData.message
             });
 
-            const result = await response.json();
-
-            if (response.ok && result.success) {
+            if (result.success) {
                 setStatus('success');
             } else {
-                console.error("Erreur API:", result.error);
                 setStatus('error');
             }
         } catch (error) {
-            console.error("Erreur réseau:", error);
+            console.error("Erreur:", error.message);
             setStatus('error');
         }
     };
@@ -92,34 +108,45 @@ export default function ContactPage() {
                             className="lg:w-2/3 w-full"
                         >
                             <form onSubmit={handleSubmit} className="space-y-8 bg-white/[0.02] p-8 md:p-12 rounded-3xl border border-white/5 backdrop-blur-sm">
+                                {/* Honeypot - Hidden from humans */}
+                                <div className="hidden" aria-hidden="true">
+                                    <input type="text" name="fax_number" tabIndex="-1" autoComplete="off" />
+                                </div>
+
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                     <div className="space-y-2">
                                         <label className="text-[10px] font-mono text-tech-blue uppercase tracking-[0.2em] ml-2">Votre Nom</label>
                                         <input
+                                            name="name"
                                             required
                                             type="text"
                                             placeholder="Identité numérique"
-                                            className="w-full bg-tech-dark border border-white/10 rounded-xl px-5 py-4 text-white focus:outline-none focus:border-tech-blue focus:ring-1 focus:ring-tech-blue/50 transition-all"
+                                            className={`w-full bg-tech-dark border ${errors.name ? 'border-red-400' : 'border-white/10'} rounded-xl px-5 py-4 text-white focus:outline-none focus:border-tech-blue focus:ring-1 focus:ring-tech-blue/50 transition-all`}
                                         />
+                                        {errors.name && <p className="text-red-400 text-[10px] font-mono uppercase ml-2">{errors.name}</p>}
                                     </div>
                                     <div className="space-y-2">
                                         <label className="text-[10px] font-mono text-tech-blue uppercase tracking-[0.2em] ml-2">Email de contact</label>
                                         <input
+                                            name="email"
                                             required
                                             type="email"
                                             placeholder="votre@email.com"
-                                            className="w-full bg-tech-dark border border-white/10 rounded-xl px-5 py-4 text-white focus:outline-none focus:border-tech-blue focus:ring-1 focus:ring-tech-blue/50 transition-all"
+                                            className={`w-full bg-tech-dark border ${errors.email ? 'border-red-400' : 'border-white/10'} rounded-xl px-5 py-4 text-white focus:outline-none focus:border-tech-blue focus:ring-1 focus:ring-tech-blue/50 transition-all`}
                                         />
+                                        {errors.email && <p className="text-red-400 text-[10px] font-mono uppercase ml-2">{errors.email}</p>}
                                     </div>
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-[10px] font-mono text-tech-blue uppercase tracking-[0.2em] ml-2">Message</label>
                                     <textarea
+                                        name="message"
                                         required
                                         rows="6"
                                         placeholder="Comment souhaitez-vous contribuer à la communauté ?"
-                                        className="w-full bg-tech-dark border border-white/10 rounded-xl px-5 py-4 text-white focus:outline-none focus:border-tech-blue focus:ring-1 focus:ring-tech-blue/50 transition-all resize-none"
+                                        className={`w-full bg-tech-dark border ${errors.message ? 'border-red-400' : 'border-white/10'} rounded-xl px-5 py-4 text-white focus:outline-none focus:border-tech-blue focus:ring-1 focus:ring-tech-blue/50 transition-all resize-none`}
                                     ></textarea>
+                                    {errors.message && <p className="text-red-400 text-[10px] font-mono uppercase ml-2">{errors.message}</p>}
                                 </div>
 
                                 {status === 'error' && (
