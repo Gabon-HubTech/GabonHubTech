@@ -48,6 +48,7 @@ export default function EventsPage() {
             {events.map((event) => (
               <div key={event._id} className="transition-transform duration-500 hover:-translate-y-3">
                 <HexagonCard 
+                  id={event._id}
                   title={event.title}
                   subtitle={event.status}
                   description={event.description}
