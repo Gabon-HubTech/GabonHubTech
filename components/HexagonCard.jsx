@@ -19,7 +19,9 @@ export default function HexagonCard({ title, subtitle, description, iconName, id
         </div>
         <h3 className="text-white font-bold text-xl mb-1">{title}</h3>
         <p className="text-tech-blue text-sm mb-3 font-mono">{subtitle}</p>
-        <p className="text-tech-accent/60 text-sm leading-tight">{description}</p>
+        <p className="text-tech-accent/60 text-sm leading-tight">
+            {description && description.length > 100 ? `${description.substring(0, 100)}...` : description}
+        </p>
 
         <Link href={`/events/${id}`} className="mt-4 text-xs font-bold text-tech-blue uppercase tracking-widest hover:text-white transition-colors">
           En savoir plus →
