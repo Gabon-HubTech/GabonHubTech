@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { apiFetch } from '@/lib/api';
 import AdminForm from '@/components/AdminForm';
+import { ArrowLeft } from 'lucide-react';
+import Link from 'next/link';
 
 export default function AdminEvents() {
     const [events, setEvents] = useState([]);
@@ -29,6 +31,9 @@ export default function AdminEvents() {
 
     return (
         <div className="p-10 bg-tech-dark min-h-screen text-white">
+            <Link href="/admin/dashboard" className="flex items-center text-tech-blue hover:text-white mb-6 transition-colors">
+                <ArrowLeft className="mr-2" /> Retour au Dashboard
+            </Link>
             <h1 className="text-3xl mb-6">Gestion Événements</h1>
             <AdminForm 
                 fields={[{name: 'title', required: true}, {name: 'description', required: true}, {name: 'location', required: true}]} 
