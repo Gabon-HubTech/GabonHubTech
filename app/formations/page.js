@@ -83,10 +83,13 @@ export default function FormationsPage() {
                                     {course.title}
                                 </h3>
 
-                                <button className="flex items-center space-x-2 text-sm font-bold text-white/40 group-hover:text-white transition-colors">
+                                <Link 
+                                    href={`/formations/${course._id}`}
+                                    className="flex items-center space-x-2 text-sm font-bold text-white/40 group-hover:text-white transition-colors"
+                                >
                                     <span>VOIR LE PROGRAMME</span>
                                     <ChevronRight size={16} />
-                                </button>
+                                </Link>
                             </motion.div>
                         ))}
                     </div>
