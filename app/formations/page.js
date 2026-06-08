@@ -89,6 +89,13 @@ export default function FormationsPage() {
 
                                 <a 
                                     href={`/formations/${course._id || course.id}`}
+                                    onClick={(e) => {
+                                        console.log("Clic détecté sur l'ID:", course._id || course.id);
+                                        if (!(course._id || course.id)) {
+                                            e.preventDefault();
+                                            alert("Erreur : Aucun ID trouvé pour cette formation !");
+                                        }
+                                    }}
                                     className="flex items-center space-x-2 text-sm font-bold text-white/40 group-hover:text-white transition-colors"
                                 >
                                     <span>VOIR LE PROGRAMME</span>
