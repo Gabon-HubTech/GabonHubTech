@@ -14,6 +14,13 @@ export default function AdminForm({ onSubmit, initialData = {}, fields }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        
+        // Validation spécifique pour la description
+        if (formData.description && (formData.description.length < 90 || formData.description.length > 110)) {
+            alert(`La description doit faire entre 90 et 110 caractères. Elle fait actuellement ${formData.description.length} caractères.`);
+            return;
+        }
+
         onSubmit(formData);
         setFormData({}); // Reset form
     };
