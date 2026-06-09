@@ -31,8 +31,6 @@ export default function FormationsPage() {
             <DotMatrixBackground />
 
             <div className="container mx-auto px-6 relative z-10">
-                <button onClick={() => alert("Page cliquable")} className="bg-red-500 p-4 text-white z-[999] mb-4">TEST CLIC PAGE</button>
-                <p className="text-white mb-4">Dernière version : {new Date().toLocaleTimeString()}</p>
                 {/* Header */}
                 <div className="max-w-3xl mb-16">
                     <motion.div
@@ -64,11 +62,9 @@ export default function FormationsPage() {
                                 transition={{ delay: index * 0.1 }}
                                 className="group relative bg-tech-dark-lighter/50 border border-white/10 p-8 rounded-2xl hover:border-tech-blue/50 transition-all duration-500"
                             >
-                                {/* Effet de brillance au survol */}
-                                <div className={`absolute inset-0 bg-gradient-to-br ${course.color} opacity-0 group-hover:opacity-5 transition-opacity duration-500 rounded-2xl`} />
+                                <div className={`absolute inset-0 bg-gradient-to-br ${course.color || 'from-blue-500 to-cyan-400'} opacity-0 group-hover:opacity-5 transition-opacity duration-500 rounded-2xl`} />
 
                                 <div className="text-tech-blue mb-6 group-hover:scale-110 transition-transform duration-300">
-                                    {/* Icone simple, on pourrait la gérer dynamiquement si besoin */}
                                     <BookOpen className="w-8 h-8" />
                                 </div>
 
@@ -85,51 +81,21 @@ export default function FormationsPage() {
                                     {course.title}
                                 </h3>
 
-                                <p className="text-gray-400 text-sm mb-4">
+                                <div className="text-gray-400 text-sm mb-4">
                                     {course.description && course.description.length > 100 ? `${course.description.substring(0, 100)}...` : course.description}
-                                </p>
+                                </div>
 
-                                <a 
+                                <Link 
                                     href={`/formations/${course._id || course.id}`}
-                                    onClick={(e) => {
-                                        console.log("Clic détecté sur l'ID:", course._id || course.id);
-                                        if (!(course._id || course.id)) {
-                                            e.preventDefault();
-                                            alert("Erreur : Aucun ID trouvé pour cette formation !");
-                                        }
-                                    }}
                                     className="flex items-center space-x-2 text-sm font-bold text-white/40 group-hover:text-white transition-colors"
                                 >
                                     <span>VOIR LE PROGRAMME</span>
                                     <ChevronRight size={16} />
-                                </a>
+                                </Link>
                             </motion.div>
                         ))}
                     </div>
                 )}
-
-                {/* Section de réassurance */}
-                <div className="mt-24 p-8 border border-dashed border-white/10 rounded-3xl flex flex-col md:flex-row items-center justify-between bg-white/[0.02] backdrop-blur-sm">
-                    <div className="mb-6 md:mb-0">
-                        <h4 className="text-xl font-bold text-white mb-2 text-center md:text-left">
-                            Formation sur mesure ?
-                        </h4>
-                        <p className="text-gray-500 text-sm text-center md:text-left">
-                            Nous accompagnons aussi les entreprises gabonaises dans leur transformation digitale.
-                        </p>
-                    </div>
-
-                    <Link href="/contact" className="w-full md:w-auto">
-                        <motion.div
-                            whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(10, 102, 194, 0.4)" }}
-                            whileTap={{ scale: 0.95 }}
-                            className="px-8 py-4 bg-tech-blue text-white font-bold uppercase tracking-widest rounded-full flex items-center justify-center cursor-pointer transition-all"
-                        >
-                            <Mail className="mr-2 w-5 h-5 text-white" />
-                            Nous Contacter
-                        </motion.div>
-                    </Link>
-                </div>
             </div>
         </main>
     );
